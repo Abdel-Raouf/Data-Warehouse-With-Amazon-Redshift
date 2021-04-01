@@ -32,6 +32,13 @@ As a data engineer, I'll build an ELT pipeline that extracts their data from S3,
 
 - **Log JsonPath File**: Contains Paths to Navigate the log data folders for the Json Log Files.
 
+# Database Schema:
+The schema used is the Star Schema: There is one main fact table containing all the measures associated with each event songplays, and 4-dimensional tables songs, artists, users and time, each with a primary key that is being referenced from the fact table.
+
+Two Staging Tables, to load data from them into the Fact and Dimensional Tables.
+![App_Look](https://github.com/Abdel-Raouf/Data-Warehouse-With-Amazon-Redshift/blob/main/images/Star-Schema.png)
+
+
 # Data Model Selection:
 
 We used a Data Warehouse based on the Columnar Data-Model (Amazon Redshift), Due to:
@@ -40,3 +47,13 @@ We used a Data Warehouse based on the Columnar Data-Model (Amazon Redshift), Due
 - Internally, Amazon Redshift is Based on Postgresql Engine (Which is Efficient proven), with Modified Extensions for Custom Columnar Storage.
 - Amazon Redshift is a `MPP` DB, as it Parallelize the Execution of the Same Query on Multiple Cores (Slices), Due to there is different parts of the same table exists on Multiple Cores (Slices).
 - Amazon Redshift is Cloud-Managed, so we can Scale Up or Down Easily on Demand.
+
+# Project Structure
+- `create_tables.py` -> This script will drop old tables (if exist) ad re-create new tables.
+- `elt.py` -> This script executes the queries that extract JSON data from the S3 bucket and ingest them to Redshift.
+- `sql_queries.py` -> This file contains variables with SQL statement in String formats, partitioned by CREATE, DROP, COPY and INSERT statement.
+- `dhw.cfg` -> Configuration file contains info about `Redshift access info`, `IAM Role` and `S3` which contains links to Json Files.
+
+# How to Run:
+1. Run **create_tables.py** from terminal to set up the database and tables on Amazon Redshift DB.
+2. Run **elt.py** from terminal to process and load data into Redshift.
