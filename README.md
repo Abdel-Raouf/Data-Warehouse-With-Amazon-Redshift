@@ -4,8 +4,8 @@ Putting into practice the following concepts:
 
 - Data modeling (Applying Conceptual Modeling, then Construct Fact and Dimension Tables).
 - Database Schema (Apply a specific schema to Fact and Dimension Tables, which suits our Data-Size and Structure => Star-Schema).
-- ELT Pipeline (Construct an ELT Pipeline to Extract Data From Log Files on S3 Bucket, load Data to the Staging tables in Amazon Redshift which acts as a Data-Warehouse, then, apply various transformation needed on the Staging tables, while inserting Data into Fact and Dimentional Tables).
-- Dealing With a Data Warehouse (By Collecting Data from Multiple Sources `OLTP DBs`, then Transfering Data to `OLAP`, using an ELT process), putting in mind Various Data Warehouse Architectures (Kimball's `Bus Arch`, Inmon `CIF`, Data Marts).
+- ETL Pipeline (Construct an ETL Pipeline to Extract Data From Log Files on S3 Bucket, load Data to the Staging tables in Amazon Redshift which acts as a Data-Warehouse, then, apply various transformation needed on the Data, before inserting Data into Fact and Dimensional Tables).
+- Dealing With a Data Warehouse (By Collecting Data from Multiple Sources `OLTP DBs`, then Transfering Data to `OLAP`, using an ETL process), putting in mind Various Data Warehouse Architectures (Kimball's `Bus Arch`, Inmon `CIF`, Data Marts).
 - Provisioning an infrastructure on the cloud (Amazon Redshift).
 - Dealing with Infrastructure as code (Iac) using either AWS python SDK (Boto3) or Terraform.
 - Applying Table Design Optimization on Amazon Redshift (By using Various Distribution Styles and Sorting key, on the Partitioned tables), Which help in speeding up Queries.
@@ -14,7 +14,7 @@ Putting into practice the following concepts:
 
 A music streaming startup, Sparkify, has grown their user base and song database and want to move their processes and data onto the cloud. Their data resides in S3, in a directory of JSON logs on user activity on the app, as well as a directory with JSON metadata on the songs in their app.
 
-As a data engineer, I'll build an ELT pipeline that extracts their data from S3, stages them in Redshift, and transforms data into a set of dimensional tables for their analytics team to continue finding insights in what songs their users are listening to.
+As a data engineer, I'll build an ETL pipeline that extracts their data from S3, stages them in Redshift, and transforms data into a set of dimensional tables for their analytics team to continue finding insights in what songs their users are listening to.
 
 # Data Sample:
 
@@ -33,11 +33,11 @@ As a data engineer, I'll build an ELT pipeline that extracts their data from S3,
 - **Log JsonPath File**: Contains Paths to Navigate the log data folders for the Json Log Files.
 
 # Database Schema:
+
 The schema used is the Star Schema: There is one main fact table containing all the measures associated with each event songplays, and 4-dimensional tables songs, artists, users and time, each with a primary key that is being referenced from the fact table.
 
 Two Staging Tables, to load data from them into the Fact and Dimensional Tables.
 ![App_Look](https://github.com/Abdel-Raouf/Data-Warehouse-With-Amazon-Redshift/blob/main/images/Star-Schema.png)
-
 
 # Data Model Selection:
 
@@ -49,11 +49,13 @@ We used a Data Warehouse based on the Columnar Data-Model (Amazon Redshift), Due
 - Amazon Redshift is Cloud-Managed, so we can Scale Up or Down Easily on Demand.
 
 # Project Structure
+
 - `create_tables.py` -> This script will drop old tables (if exist) ad re-create new tables.
-- `elt.py` -> This script executes the queries that extract JSON data from the S3 bucket and ingest them to Redshift.
+- `etl.py` -> This script executes the queries that extract JSON data from the S3 bucket and ingest them to Redshift.
 - `sql_queries.py` -> This file contains variables with SQL statement in String formats, partitioned by CREATE, DROP, COPY and INSERT statement.
 - `dhw.cfg` -> Configuration file contains info about `Redshift access info`, `IAM Role` and `S3` which contains links to Json Files.
 
 # How to Run:
+
 1. Run **create_tables.py** from terminal to set up the database and tables on Amazon Redshift DB.
-2. Run **elt.py** from terminal to process and load data into Redshift.
+2. Run **etl.py** from terminal to process and load data into Redshift.
