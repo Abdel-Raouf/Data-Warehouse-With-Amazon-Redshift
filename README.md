@@ -48,6 +48,12 @@ We used a Data Warehouse based on the Columnar Data-Model (Amazon Redshift), Due
 - Amazon Redshift is a `MPP` DB, as it Parallelize the Execution of the Same Query on Multiple Cores (Slices), Due to there is different parts of the same table exists on Multiple Cores (Slices).
 - Amazon Redshift is Cloud-Managed, so we can Scale Up or Down Easily on Demand.
 
+# Data Cleaning:
+
+- Filter Log user Data with the `page=NextSong`, to know what song will each user like to listen to next (to help analytics team to continue finding insights about what songs their users love to listen to).
+- Using a `TIMEFORMAT AS 'epochmillisecs'` to fetch data from `S3` bucket in the right format for `Amazon Redshift` (Unix epoch format which is the number of seconds since January 1, 1970), which is essential for redshift to know how to deal with the source data Time-Format.
+- Extract hour, day, week of year, month, year, and weekday From the Timestamp in the staging_events into the dim_time dimensional table.
+
 # Project Structure
 
 - `create_tables.py` -> This script will drop old tables (if exist) ad re-create new tables.

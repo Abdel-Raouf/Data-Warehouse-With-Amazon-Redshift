@@ -29,8 +29,8 @@ staging_songs_table_create = ("""
 """)
 
 songplay_table_create = ("""
-        CREATE TABLE IF NOT EXISTS fact_songplays(songplay INT IDENTITY(0,1) PRIMARY KEY, start_time TIMESTAMP SORTKEY, user_id INT DISTKEY, level VARCHAR, song_id VARCHAR, \
-                    artist_id VARCHAR, session_id INT, location VARCHAR, user_agent VARCHAR)
+        CREATE TABLE IF NOT EXISTS fact_songplays(songplay INT IDENTITY(0,1) PRIMARY KEY, start_time TIMESTAMP NOT NULL SORTKEY, user_id INT NOT NULL DISTKEY, level VARCHAR, song_id VARCHAR NOT NULL, \
+                    artist_id VARCHAR NOT NULL, session_id INT, location VARCHAR, user_agent VARCHAR)
 """)
 
 user_table_create = ("""
@@ -44,7 +44,7 @@ song_table_create = ("""
 """)
 
 artist_table_create = ("""
-        CREATE TABLE IF NOT EXISTS dim_artists(artist_id VARCHAR NOT NULL PRIMARY KEY SORTKEY, name VARCHAR NOT NULL, location VARCHAR, \
+        CREATE TABLE IF NOT EXISTS dim_artists(artist_id VARCHAR PRIMARY KEY SORTKEY, name VARCHAR NOT NULL, location VARCHAR, \
                         longitude FLOAT, latitude FLOAT) DISTSTYLE ALL;
 """)
 
@@ -73,7 +73,7 @@ staging_songs_copy = ("""
 
 songplay_table_insert = ("""
     INSERT INTO fact_songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
-    SELECT  se.ts AS start_time,
+    SELECT DISTINCT se.ts AS start_time,
         se.userId AS user_id,
         se.level As level,
         ss.song_id AS song_id,
@@ -89,7 +89,7 @@ songplay_table_insert = ("""
 
 user_table_insert = ("""
     INSERT INTO dim_users (user_id, first_name, last_name, gender, level) \
-    SELECT userId AS user_id,
+    SELECT DISTINCT userId AS user_id,
         firstName AS first_name,
         lastName AS last_name,
         gender AS gender,
@@ -100,7 +100,7 @@ user_table_insert = ("""
 
 song_table_insert = ("""
     INSERT INTO dim_songs (song_id, title, artist_id, year, duration) \
-    SELECT song_id,
+    SELECT DISTINCT song_id,
         title,
         artist_id,
         year,
@@ -111,7 +111,7 @@ song_table_insert = ("""
 
 artist_table_insert = ("""
     INSERT INTO dim_artists (artist_id, name, location, longitude, latitude) \
-    SELECT artist_id AS artist_id,
+    SELECT DISTINCT artist_id AS artist_id,
         artist_name AS name,
         artist_location AS location,
         artist_longitude AS longitude,
@@ -122,7 +122,7 @@ artist_table_insert = ("""
 
 time_table_insert = ("""
     INSERT INTO dim_time (start_time, hour, day, week_of_year, month, year, week_day) \
-    SELECT ts AS start_time,
+    SELECT DISTINCT ts AS start_time,
         EXTRACT(hour FROM ts),
         EXTRACT(day FROM ts),
         EXTRACT(week FROM ts),
