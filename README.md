@@ -4,7 +4,7 @@ Putting into practice the following concepts:
 
 - Data modeling (Applying Conceptual Modeling, then Construct Fact and Dimension Tables).
 - Database Schema (Apply a specific schema to Fact and Dimension Tables, which suits our Data-Size and Structure => Star-Schema).
-- ETL Pipeline (Construct an ETL Pipeline to Extract Data From Log Files on S3 Bucket, load Data to the Staging tables in Amazon Redshift which acts as a Data-Warehouse, then, apply various transformation needed on the Data, before inserting Data into Fact and Dimensional Tables).
+- ETL Pipeline (Construct an ETL Pipeline to Extract Data From Log Files on S3 Bucket, Data goes into the Staging tables (staging area, each table or file in source data has a staging table related to it) in Amazon Redshift which acts as a Data-Warehouse, then, apply various transformation needed on the Data, before inserting (load) Data into Fact and Dimensional Tables).
 - Dealing With a Data Warehouse (By Collecting Data from Multiple Sources `OLTP DBs`, then Transfering Data to `OLAP`, using an ETL process), putting in mind Various Data Warehouse Architectures (Kimball's `Bus Arch`, Inmon `CIF`, Data Marts).
 - Provisioning an infrastructure on the cloud (Amazon Redshift).
 - Dealing with Infrastructure as code (Iac) using either AWS python SDK (Boto3) or Terraform.
