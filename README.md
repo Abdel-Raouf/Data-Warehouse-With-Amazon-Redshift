@@ -39,7 +39,7 @@ The schema used is the Star Schema: There is one main fact table containing all 
 Two Staging Tables, to load data from them into the Fact and Dimensional Tables.
 ![App_Look](https://github.com/Abdel-Raouf/Data-Warehouse-With-Amazon-Redshift/blob/main/images/Star-Schema.png)
 
-# Data Model Selection:
+# Architecture Selection:
 
 We used a Data Warehouse based on the Columnar Data-Model (Amazon Redshift), Due to:
 
